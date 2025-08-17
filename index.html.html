@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: url('https://ohmyfacts.com/wp-content/uploads/2024/10/29-facts-about-low-calorie-1728483409.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #333;
+    }
+    .overlay {
+      background: rgba(255, 255, 255, 0.8);
+      min-height: 100vh;
+      padding: 40px 20px;
+      box-sizing: border-box;
+    }
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    form {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    input, select, button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin: 12px 0;
+      border: 1px solid #bbb;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+    button {
+      background: #4caf50;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 1em;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    .reset-btn {
+      background: #f44336;
+      margin-top: 8px;
+    }
+    .reset-btn:hover {
+      background: #d32f2f;
+    }
+    h1, h2 {
+      text-align: center;
+      color: #333;
+    }
+    #result {
+      background: #fff;
+      padding: 20px;
+      margin-top: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      text-align: left;
+    }
+    .bmi-info {
+      background: #e8f5e9;
+      padding: 10px;
+      border-radius: 8px;
+      margin: 10px 0;
+      font-size: 0.9em;
+      color: #2e7d32;
+    }
+    ul {
+      margin-left: 20px;
+    }
+  </style>
+  <title>Personalized Diet Planner</title>
+</head>
+<body>
+  <div class="overlay">
+    <div class="container">
+      <h1>🥗 Personalized Diet Planner</h1>
+      <p>Enter your details to get a proper balanced diet plan</p>
+      <form id="dietForm" onsubmit="generateDiet(event)">
+        <input type="number" id="age" placeholder="Enter your age" min="5" max="100" required>
+        <input type="number" id="height" placeholder="Enter your height (cm)" min="50" max="250" required>
+        <input type="number" id="weight" placeholder="Enter your weight (kg)" min="10" max="200" required>
+        <select id="preference" required>
+          <option value="">Select preference</option>
+          <option value="veg">Vegetarian</option>
+          <option value="nonveg">Non-Vegetarian</option>
+        </select>
+        <button type="submit">Get My Diet</button>
+        <button type="button" class="reset-btn" onclick="resetForm()">Reset</button>
+      </form>
+      <div id="result"></div>
+    </div>
+  </div>
+
+  <script>
+    function generateDiet(event) {
+      event.preventDefault();
+
+      const age = parseInt(document.getElementById('age').value);
+      const height = parseFloat(document.getElementById('height').value) / 100;
+      const weight = parseFloat(document.getElementById('weight').value);
+      const preference = document.getElementById('preference').value;
+
+      const bmi = (weight / (height * height)).toFixed(1);
+      let category = '';
+      if (bmi < 18.5) category = 'Underweight';
+      else if (bmi < 24.9) category = 'Normal';
+      else if (bmi < 29.9) category = 'Overweight';
+      else category = 'Obese';
+
+      let diet = '';
+      if (preference === 'veg') {
+        if (category === 'Underweight') {
+          diet = '<ul><li>🥛 Milk</li><li>🥜 Nuts</li><li>🍚 Rice</li><li>🍌 Bananas</li><li>🧀 Paneer</li><li>🍲 Lentils</li></ul>';
+        } else if (category === 'Normal') {
+          diet = '<ul><li>🥗 Mixed veggies</li><li>🍎 Fruits</li><li>🥛 Low-fat milk</li><li>🌾 Whole grains</li><li>🥔 Potatoes</li><li>🥜 Nuts</li></ul>';
+        } else {
+          diet = '<ul><li>🥦 Green vegetables</li><li>🥗 Salads</li><li>🍎 Apples</li><li>🍊 Citrus fruits</li><li>🌾 Oats</li><li>🥛 Skimmed milk</li></ul>';
+        }
+      } else {
+        if (category === 'Underweight') {
+          diet = '<ul><li>🥛 Milk</li><li>🍗 Chicken</li><li>🥚 Eggs</li><li>🍌 Bananas</li><li>🐟 Fish</li><li>🥜 Nuts</li></ul>';
+        } else if (category === 'Normal') {
+          diet = '<ul><li>🥗 Veggies</li><li>🍗 Lean chicken/fish</li><li>🍎 Fruits</li><li>🌾 Whole grains</li><li>🥚 Eggs</li><li>🥛 Milk</li></ul>';
+        } else {
+          diet = '<ul><li>🥦 Veggies</li><li>🥗 Salads</li><li>🐟 Grilled fish</li><li>🍎 Apples</li><li>🍊 Oranges</li><li>🌾 Brown rice</li><li>🥚 Boiled eggs</li></ul>';
+        }
+      }
+
+      document.getElementById('result').innerHTML = `
+        <h2>Your Results</h2>
+        <p><strong>BMI:</strong> ${bmi} (${category})</p>
+        <div class="bmi-info">
+          <b>What is BMI?</b><br>
+          Body Mass Index (BMI) = weight (kg) ÷ height² (m²). It shows if you're underweight, normal, overweight, or obese.
+        </div>
+        <p><strong>Suggested Diet (${preference === 'veg' ? 'Vegetarian' : 'Non-Vegetarian'}):</strong></p>
+        ${diet}
+      `;
+    }
+
+    function resetForm() {
+      document.getElementById("dietForm").reset();
+      document.getElementById("result").innerHTML = "";
+    }
+  </script>
+</body>
+</html>
